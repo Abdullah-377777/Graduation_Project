@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lung Cancer Prediction App</title>
+  <meta name="description" content="A web application for predicting lung cancer based on input gene values."/>
+  <meta name="keywords" content="lung cancer, prediction, gene values, health, normal lung, primary tumor"/>
+  <meta name="author" content="Your Name"/>
+
+  <style>
+    body {
+      font-family: 'Calibri', sans-serif;
+      font-size: 1rem;
+      margin: 0;
+      background-color: #f7f9fb;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-weight: bold;
+        background: linear-gradient(135deg, #d4f1f4 0%, #8ccee8 100%);
+    }
+
+    header.page-header {
+      background-color: #34495e;
+      color: #ffffff;
+      width: 100%;
+      padding: 20px 15px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+
+    header.page-header h1 {
+      margin: 0;
+      font-size: 2.2rem;
+      
+  
+    }
+
+footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #f0f4f8;
+            color: #95a5a6;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+        footer a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        
+
+    .hamburger-menu {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+    }
+
+    .menu-icon {
+  font-size: 30px;
+  color: #ffffff;
+  background-color: rgba(44, 62, 80, 0.7); /* خلفية داكنة شفافة */
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.menu-icon:hover {
+  background-color: rgba(44, 62, 80, 0.9); /* داكن أكثر عند الوقوف */
+}
+
+    #menu-toggle {
+      display: none;
+    }
+
+    .side-menu {
+      position: fixed;
+      top: 0;
+      left: -250px;
+      width: 200px;
+      height: 100%;
+      background-color: #2c3e50;
+      padding-top: 60px;
+      transition: left 0.3s ease-in-out;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .side-menu a {
+      color: white;
+      text-decoration: none;
+      padding: 15px;
+      font-size: 1.1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+.side-menu a:hover {
+  background-color: #34495e;
+    transform: translateX(5px);
+}
+    #menu-toggle:checked ~ .side-menu {
+      left: 0;
+    }
+
+    button {
+      background-color: #2980b9;
+      color: #ffffff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #3498db;
+    }
+
+    .form-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 30px;
+      background: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+  max-width: 650px;
+  margin: 0 auto 40px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    #loading {
+      display: none;
+    }
+
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
+
+    h2 {
+      color: #2980b9;
+    }
+
+    #prediction-result {
+      font-size: 1.3rem;
+      margin-top: 15px;
+      color: #2c3e50;
+    }
+
+    .cancer-types {
+      display: grid;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 20px;
+      max-width: 1200px;
+    }
+
+    .cancer-type {
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin: 10px;
+      padding: 10px;
+      width: calc(33.33% - 20px);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .cancer-type:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+
+    .cancer-type img {
+      max-width: 50%;
+      height: auto;
+      border-radius: 5px;
+    transition: transform 0.3s ease, filter 0.3s ease;
+    }
+    .cancer-type img:hover {
+      transform: scale(1.05);
+      filter: brightness(1.1);
+    }
+
+    .cancer-type h3 {
+      color: #1e88e5;
+      margin-top: 10px;
+      font-size: 1.4rem;
+    }
+
+    .cancer-type p {
+      text-align: justify;
+      text-align: center;
+    }
+
+    .emoji {
+      font-size: 50px;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+      display: inline;
+    }
+
+    .emoji.show {
+      opacity: 1;
+      animation: bounce 0.5s;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-10px);
+      }
+      60% {
+        transform: translateY(-5px);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .cancer-type {
+        width: calc(50% - 20px);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .cancer-type {
+        width: 100%;
+      }
+    }
+    .close-icon {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 1.5rem;
+  color: #ecf0f1;
+  cursor: pointer;
+}
+input[type="number"] {
+  padding: 8px;
+  width: 90%;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-weight: normal;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+input[type="number"]:focus {
+      border-color: #1e88e5;
+      box-shadow: 0 0 8px rgba(30, 136, 229, 0.3);
+      outline: none;
+    }
+
+#loading::after {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+  border: 3px solid #3498db;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #2980b9;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+.back-to-top:hover {
+    background-color: #3498db;
+}
+
+
+.main-container {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+  max-width: 900px;
+  margin: 0 auto 40px;
+}
+
+.cta {
+    text-align: center;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+    max-width: 650px;
+    margin: 0 auto 40px;
+}
+
+
+
+  </style>
+</head>
+    
+
+  <header class="page-header">
+<h1> Lung Cancer Prediction</h1>  </header>
+
+  <div class="hamburger-menu">
+  <input type="checkbox" id="menu-toggle">
+  <label for="menu-toggle" class="menu-icon">&#9776;</label>
+  <nav class="side-menu">
+          <label for="menu-toggle" class="close-icon">✕</label> 
+
+    <a href="/home">Home</a>
+    <a href="/">Prediction</a>
+    <a href="/about">About Us</a>
+  </nav>
+</div>
+</head>
+
+<body>
+
+<main style="
+  background: #fff;
+  padding: 30px;
+  margin: 30px auto;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  max-width: 1000px;
+">
+<div class="container-box" style="
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 40px 30px;
+  max-width: 1100px;
+  margin: 40px auto;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.07);
+">
+  <section class="form-section">
+    <h2 style="text-align:center; color:#2980b9;">Lung Cancer Prediction Form</h2>
+    <form id="prediction-form" style="margin-top: 20px;">
+      <div class="form-group">
+        <label for="gene1">Enter gene expression value for 61879_at(PDE1C):</label>
+        <input type="number" step="any" id="gene1" name="gene1" required />
+      </div>
+      <div class="form-group">
+        <label for="gene2">Enter gene expression value for 65210_at(AI087801_m_RNA):</label>
+        <input type="number" step="any" id="gene2" name="gene2" required />
+      </div>
+      <div class="form-group">
+        <label for="gene3">Enter gene expression value for 52818_at(AA579061_m_RNA):</label>
+        <input type="number" step="any" id="gene3" name="gene3" required />
+      </div>
+      <div class="form-group">
+        <label for="gene4">Enter gene expression value for 60381_r_at(AA628592_m_RNA):</label>
+        <input type="number" step="any" id="gene4" name="gene4" required />
+      </div>
+      <button type="submit">Submit</button>
+      <div id="error-message" class="error"></div>
+    </form>
+
+  <h2 id="prediction-result"></h2>
+  <p id="loading">Loading...</p>
+  </section>
+
+   <section class="cancer-types" style="margin-top: 40px;">
+    <div class="cancer-type">
+      <img src="images/Lungrate_Cancer.png" alt="Primary Lung Tumor" />
+        <h3>Primary Lung Tumor</h3>
+        <p>Primary lung tumors originate in the lung tissue and can spread to other parts of the body. They are often associated with risk factors like smoking and environmental exposures.</p>
+      </div>
+
+    <div class="cancer-type">
+      <img src="images/Normal_Lungrate.png" alt="Normal Lung" />
+        <h3>Normal Lung</h3>
+        <p>A normal lung is essential for healthy breathing and gas exchange in the human body.</p>      </div>
+  </div>
+   <section class="cancer-types" style="margin-top: 40px;">
+
+      <div class="cancer-type"  style="width: 100%;">
+
+        <h2>Learn More About Our Project</h2>
+        <p>Discover how our team uses machine learning to advance lung cancer detection.</p>
+        <a href="/about" class="btn" style="display:inline-block;margin-top:10px;padding:10px 20px;background-color:#2980b9;color:#fff;border-radius:6px;text-decoration:none;transition:background-color 0.3s ease;">About Us</a>
+      </div>
+    </section>
+    </div>
+</main>
+
+<footer>
+        © 2025 Lung Cancer Awareness | <a href="privacy-policy.html">Privacy Policy</a>
+    </footer>
+    <button class="back-to-top" aria-label="Back to top">↑</button>
+  <script>
+    document.getElementById('prediction-form').onsubmit = async function(event) {
+    event.preventDefault();
+    const loading = document.getElementById('loading');
+    const errorMessage = document.getElementById('error-message');
+    const predictionResult = document.getElementById('prediction-result');
+
+    loading.style.display = 'block';
+    errorMessage.innerHTML = ''; // Clear previous error messages
+    predictionResult.innerHTML = ''; // Clear previous prediction
+
+    const geneValues = [
+        parseFloat(document.getElementById('gene1').value),
+        parseFloat(document.getElementById('gene2').value),
+        parseFloat(document.getElementById('gene3').value),
+        parseFloat(document.getElementById('gene4').value)
+    ];
+
+    const geneIds = ['gene1', 'gene2', 'gene3', 'gene4'];
+
+    // التحقق من القيم غير الصحيحة
+    for (let i = 0; i < geneValues.length; i++) {
+        if (isNaN(geneValues[i])) {
+            loading.style.display = 'none';
+            errorMessage.innerHTML = 'Please enter valid numeric values.';
+            return;
+        }
+        if (geneValues[i] === 0) {
+            loading.style.display = 'none';
+            errorMessage.innerHTML = `Prediction cannot be made because the input value for ${geneIds[i]} is zero.`;
+            return;
+        }
+    }
+
+    // التحقق من تسلسل الإدخال
+    for (let i = 0; i < geneIds.length; i++) {
+        if (document.getElementById(geneIds[i]).value === '') {
+            if (i > 0 && document.getElementById(geneIds[i - 1]).value !== '') {
+                loading.style.display = 'none';
+                errorMessage.innerHTML = `Please fill the input for ${geneIds[i]} before moving to the next.`;
+                return;
+            }
+        }
+    }
+
+    try {
+        const response = await fetch('/predict', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-API-KEY': 'rf_api_key' // استبدل بمفتاح API صالح
+            },
+            body: JSON.stringify({ data: geneValues })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (!data.prediction) {
+            throw new Error('Invalid response format: prediction field is missing');
+        }
+
+        const predictionText = `Prediction: ${data.prediction}`;
+        const emoji = data.prediction === 'normal' ? '😊' : '😢';
+
+        predictionResult.innerHTML = `${emoji} ${predictionText}`;
+
+        const emojiElement = document.createElement('span');
+        emojiElement.className = 'emoji show';
+        emojiElement.innerHTML = emoji;
+        predictionResult.appendChild(emojiElement);
+
+        setTimeout(() => {
+            emojiElement.classList.remove('show');
+        }, 2000);
+    } catch (error) {
+        console.error('Error during prediction:', error); // تسجيل الخطأ في وحدة التحكم
+        errorMessage.innerHTML = `Error: ${error.message}`;
+    } finally {
+        loading.style.display = 'none';
+    }
+};
+
+
+</script>
+</body>
+</html>
