@@ -67,14 +67,24 @@ async def predict(input_data: InputData, api_key: str = Depends(verify_api_key))
         import traceback
         print("Prediction error:", traceback.format_exc())
         raise HTTPException(status_code=500, detail=str(e))
+# الصفحة الرئيسية الآن هي home.html
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
-    return templates.TemplateResponse("Prediction.html", {"request": request})
+    return templates.TemplateResponse("home.html", {"request": request})
 
+# إذا أردت دعم /home أيضًا (اختياري، لكن مفيد)
 @app.get("/home", response_class=HTMLResponse)
 async def read_home(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
 
+# صفحة التنبؤ أصبحت منفصلة
+@app.get("/Prediction", response_class=HTMLResponse)
+async def read_prediction(request: Request):
+    return templates.TemplateResponse("Prediction.html", {"request": request})
+
+# باقي الـ endpoints (مثل /predict POST، /about، إلخ) تبقى كما هي
+
 @app.get("/about", response_class=HTMLResponse)
 async def read_about(request: Request):
+
     return templates.TemplateResponse("about.html", {"request": request})
