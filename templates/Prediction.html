@@ -326,7 +326,6 @@ input[type="number"]:focus {
 
 
   </style>
-</head>
     
 
   <header class="page-header">
@@ -365,8 +364,7 @@ input[type="number"]:focus {
 ">
   <section class="form-section">
     <h2 style="text-align:center; color:#2980b9;">Lung Cancer Prediction Form</h2>
-    <form id="prediction-form" style="margin-top: 20px;">
-      <div class="form-group">
+<form id="prediction-form" style="margin-top: 20px;" onsubmit="predictLungCancer(); return false;">      <div class="form-group">
         <label for="gene1">Enter gene expression value for 61879_at(PDE1C):</label>
         <input type="number" step="any" id="gene1" name="gene1" required />
       </div>
@@ -401,7 +399,6 @@ input[type="number"]:focus {
       <img src="images/Normal_Lungrate.png" alt="Normal Lung" />
         <h3>Normal Lung</h3>
         <p>A normal lung is essential for healthy breathing and gas exchange in the human body.</p>      </div>
-  </div>
    <section class="cancer-types" style="margin-top: 40px;">
 
       <div class="cancer-type"  style="width: 100%;">
@@ -426,12 +423,12 @@ async function predictLungCancer() {
     const errorMsg = document.getElementById('error-message');
     const resultDiv = document.getElementById('prediction-result');
 
-    // إخفاء النتائج السابقة وإظهار التحميل
+    // تنظيف النتائج السابقة
     errorMsg.innerHTML = '';
     resultDiv.innerHTML = '';
     loading.style.display = 'block';
 
-    // جمع القيم
+    // جمع القيم الأربعة
     const geneValues = [
         parseFloat(document.getElementById('gene1').value),
         parseFloat(document.getElementById('gene2').value),
@@ -458,19 +455,20 @@ async function predictLungCancer() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-API-KEY': 'rf_api_key'   // ← القيمة التي قدمتها
+                'X-API-KEY': 'rf_api_key'   // تأكد إن هذا نفس القيمة في Render
             },
             body: JSON.stringify({ data: geneValues })
         });
 
         if (!response.ok) {
-            throw new Error(`خطأ في السيرفر: ${response.status} - ${response.statusText}`);
+            const errorText = await response.text();
+            throw new Error(`خطأ ${response.status}: ${errorText || response.statusText}`);
         }
 
         const data = await response.json();
 
         if (!data.prediction) {
-            throw new Error('لم يتم إرجاع نتيجة تنبؤ صالحة');
+            throw new Error('لم يتم إرجاع نتيجة تنبؤ صالحة من السيرفر');
         }
 
         const emoji = data.prediction.toLowerCase().includes('normal') ? '😊' : '😢';
@@ -484,9 +482,8 @@ async function predictLungCancer() {
     }
 }
 </script>
-
-</script>
 </body>
 </html>
+
 
 
