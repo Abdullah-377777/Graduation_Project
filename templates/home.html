@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn about lung cancer, its causes, symptoms, and early warning signs.">
+    <meta name="keywords" content="lung cancer, causes, symptoms, early warning signs, health">
+    <meta name="author" content="Lung Cancer Awareness Team">
+    <title>Lung Cancer Information</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Noto+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    background: linear-gradient(135deg, #d4f1f4 0%, #8ccee8 100%);
+    color: #2c3e50;
+}
+        header {
+            color: #fff;
+            padding: 20px 15px;
+            text-align: center;
+            background: linear-gradient(to right, #34495e, #2c3e50);
+
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.2rem;
+            
+        }
+        
+        main {
+            padding: 25px; 
+            max-width: 1200px;
+            margin: 25px auto;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+        }
+        .section-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .section {
+  flex: 1;
+  min-width: 300px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+        .section:hover {
+    transform: translateY(-5px);
+    background-color: #eaf4fd;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+        .section h2 {
+            color: #16a085;
+            border-bottom: 2px solid #16a085;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+        .section p {
+            line-height: 1.8;
+            font-size: 1rem;
+            color: #555;
+        }
+        
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@media (max-width: 480px) {
+  .cancer-type {
+    width: 100%;
+  }
+}
+#prediction-result {
+  font-size: 1.3rem;
+  margin-top: 15px;
+  color: #2c3e50;
+}
+        .image img {
+            max-width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, filter 0.3s ease;
+             cursor: zoom-in;
+        }
+        .image img:hover {
+    transform: scale(2);
+     z-index: 10;
+  filter: brightness(1.1);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+  position: relative;
+  
+
+}
+        .image p {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #777;
+        }
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #f0f4f8;
+            color: #95a5a6;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+        footer a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        .hamburger-menu {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+}
+
+.menu-icon {
+  font-size: 30px;
+  color: #ffffff;
+  background-color: rgba(44, 62, 80, 0.7); /* خلفية داكنة شفافة */
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.menu-icon:hover {
+  background-color: rgba(44, 62, 80, 0.9); /* داكن أكثر عند الوقوف */
+}
+
+#menu-toggle {
+  display: none;
+}
+
+.side-menu {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  width: 200px;
+  height: 100%;
+  padding-top: 60px;
+  transition: left 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #2c3e50, #1a252f);
+}
+
+.side-menu a {
+  color: #ecf0f1;
+  text-decoration: none;
+  padding: 15px;
+  font-size: 1.1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  display: block;
+   transition: background-color 0.3s ease;
+
+}
+.side-menu a:hover {
+  background-color: #34495e;
+    transform: translateX(5px);
+}
+#menu-toggle:checked ~ .side-menu {
+  left: 0;
+}
+.section-intro {
+  margin-bottom: 40px;
+}
+html {
+  scroll-behavior: smooth;
+}
+.back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #2980b9;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+.back-to-top:hover {
+    background-color: #3498db;
+}
+
+.section:target {
+  animation: highlight 3s ease-in-out;
+}
+@keyframes highlight {
+  0%   { background-color: #fff8db; }
+  100% { background-color: #ffffff; }
+}
+.cancer-type-section h2 {
+  font-size: 1.6rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(to right, #16a085, #2980b9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.cancer-type-section .icon {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+.decor-line {
+  width: 60px;
+  height: 3px;
+  background-color: #16a085;
+  margin: 10px 0 20px;
+  border-radius: 5px;
+}
+.cancer-type-section {
+  animation: fade-in 0.8s ease-in-out both;
+}
+.close-icon {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 1.5rem;
+  color: #ecf0f1;
+  cursor: pointer;
+}
+button {
+  transition: transform .2s;
+}
+button:active {
+  transform: scale(.96);
+}
+/* إعداد الحجم الجذري وحجم الخط الأساسي */
+html {
+  font-size: 16px; /* 1rem = 16px */
+}
+body {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem; /* 16px */
+}
+
+/* مثال على العناوين */
+h1 { font-size: 2.5rem; } /* 40px */
+h2 { font-size: 1.7rem;  } /* 32px */
+h3 { font-size: 1.2rem; } /* 24px */
+p  { font-size: 1rem;   } /* 16px */
+
+ details summary {
+            cursor: pointer;
+            
+            align-items: center; }
+
+    </style>
+</head>
+<!-- داخل <head> -->
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<body>
+    <header>
+        <h1>Lung Cancer Information</h1>
+    </header>
+    <div class="hamburger-menu">
+  <input type="checkbox" id="menu-toggle">
+  <label for="menu-toggle" class="menu-icon">&#9776;</label>
+  <nav class="side-menu">
+      <label for="menu-toggle" class="close-icon">✕</label> 
+    <a href="/home">Home</a>
+        <a href="/">Prediction</a>
+    <a href="/about">About Us</a>
+  </nav>
+</div>
+    <main>
+        <section class="section section-intro" data-aos="fade-up">
+            <h2>What is Lung Cancer?</h2>
+            <p>Lung cancer is a type of cancer that begins in the lungs, typically in the lining of the air passages. It occurs when abnormal cells grow uncontrollably, forming a tumor that can interfere with breathing and spread to other parts of the body.</p>
+            <p>In this page, you'll learn more about:</p>
+            <ul style="padding-left: 20px; line-height: 1.8;">
+                <li><a href="#lung-cancer-types"><strong>Types of Lung Cancer</strong></a>: A breakdown of the main subtypes, including NSCLC and SCLC.</li>
+                <li><a href="#early-warning"><strong>Early Warning Signs and Symptoms</strong></a>: Key indicators to watch for early detection.</li>
+                <li><a href="#causes"><strong>Causes of Lung Cancer</strong></a>: Risk factors that increase the likelihood of developing lung cancer.</li>
+                <li><a href="#risk"><strong>Prevention Tips</strong></a>: Ways to lower your risk and support long-term lung health.</li>
+            </ul>
+            <p>Recognizing symptoms early and understanding risk factors such as smoking, environmental exposure, and genetic history is essential for prevention and effective treatment.</p>
+        </section>
+
+
+
+                </section>
+
+        <!-- Machine Learning Pipeline Section -->
+        <section class="section section-intro" data-aos="fade-up" data-aos-delay="200">
+            <h2><span class="icon">🤖</span> Machine Learning Pipeline for Accurate Lung Cancer Diagnosis</h2>
+            <div class="decor-line"></div>
+            <p>Modern medicine leverages advanced machine learning techniques to improve lung cancer diagnosis accuracy. Our ML pipeline processes genetic data to distinguish between cancerous and healthy lung tissue with high precision.</p>
+            
+            <div class="section-container">
+                <div class="section ml-section" data-aos="fade-right" data-aos-delay="300">
+                    <h3><span class="icon">📊</span> Dataset</h3>
+                    <ul style="padding-left: 20px; line-height: 1.8;">
+                        <li><strong>Source:</strong> SBCB, GEO (GSE19804)</li>
+                        <li><strong>Samples:</strong> 114 total samples
+                            <ul style="margin-top: 8px;">
+                                <li>56 Lung Tumor samples</li>
+                                <li>58 Normal Lung Tissue samples</li>
+                            </ul>
+                        </li>
+                        <li><strong>Features:</strong> 54,676 numerical gene expression values</li>
+                        <li><strong>Target:</strong> Categorical (Lung Tumor vs. Normal Lung Tissue)</li>
+                    </ul>
+                </div>
+
+                <div class="section ml-section" data-aos="fade-left" data-aos-delay="400">
+                    <h3><span class="icon">⚙️</span> Data Preprocessing</h3>
+                    <ul style="padding-left: 20px; line-height: 1.8;">
+                        <li><strong>Cleaning:</strong> Removed missing values and outliers for data quality</li>
+                        <li><strong>Normalization:</strong> Standardized features for consistent scaling across all genes</li>
+                        <li><strong>Encoding:</strong> Converted categorical labels (Adenocarcinoma, Squamous Cell, SCLC, Normal) to numerical format</li>
+                        <li><strong>Feature Selection:</strong> Applied hybrid method combining:
+                            <ul style="margin-top: 8px;">
+                                <li>ANOVA F-value analysis</li>
+                                <li>Boruta algorithm</li>
+                                <li>Markov Blanket technique</li>
+                            </ul>
+                        </li>
+                        <li><strong>Data Splitting:</strong> 80% training, 20% testing for robust validation</li>
+                    </ul>
+                </div>
+
+                <div class="section ml-section" data-aos="fade-right" data-aos-delay="500">
+                    <h3><span class="icon">📈</span> Model Evaluation Metrics</h3>
+                    <ul style="padding-left: 20px; line-height: 1.8;">
+                        <li><strong>Accuracy:</strong> (TP + TN) / Total Samples - Overall correctness</li>
+                        <li><strong>Precision:</strong> TP / (TP + FP) - Positive prediction reliability</li>
+                        <li><strong>Recall:</strong> TP / (TP + FN) - Sensitivity in detecting cancer</li>
+                        <li><strong>F1 Score:</strong> 2 × (Precision × Recall) / (Precision + Recall) - Balanced performance</li>
+                        <li><strong>AUC:</strong> Area Under the Curve for classification performance assessment</li>
+                    </ul>
+                    <p style="margin-top: 15px; font-size: 0.9rem; color: #666;">
+                        <em>TP = True Positive, TN = True Negative, FP = False Positive, FN = False Negative</em>
+                    </p>
+                </div>
+
+                <div class="section ml-section" data-aos="fade-left" data-aos-delay="600">
+                    <h3><span class="icon">🎯</span> Classification Process</h3>
+                    <p>Our machine learning models analyze selected gene biomarkers to predict lung cancer presence:</p>
+                    <ul style="padding-left: 20px; line-height: 1.8; margin-top: 15px;">
+                        <li><strong>Input:</strong> Gene expression patterns from lung tissue samples</li>
+                        <li><strong>Processing:</strong> Models evaluate key biomarkers identified through feature selection</li>
+                        <li><strong>Output:</strong> 
+                            <ul style="margin-top: 8px;">
+                                <li><strong>Score Label:</strong> Predicted class (Cancer/Normal)</li>
+                                <li><strong>Score Probability:</strong> Confidence level (0-100%)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 15px; border-left: 4px solid #16a085;">
+                        <p style="margin: 0; font-weight: 600; color: #16a085;">Clinical Impact:</p>
+                        <p style="margin: 5px 0 0 0; font-size: 0.95rem;">This ML pipeline supports healthcare professionals in making more informed diagnostic decisions, potentially improving early detection rates and treatment outcomes.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
+
+
+        <div class="section-container section-intro" data-aos="fade-up">
+            <div class="section" >
+                <h2>Overview</h2>
+                <p>The main reason attributed to the development of lung cancer in individuals is smoking which damages the lungs. Upon inhaling cigarette smoke, toxic substances called carcinogens enter the respiratory tract. These alter the genetics, structure and function of healthy lung cells, apart from causing injury to the lining along the lungs.</p>
+                <div class="image">
+                    <img src="images/lung-cancer.jpg" alt="lung Cancer Overview">
+                    <p><i>Illustration showing the lung tissue and affected areas.</i></p>
+                </div>
+            </div>
+            <div class="section">
+                <h2>Worldwide Incidence</h2>
+                <p>According to the World Health Organization, lung cancer is one of the most common cancers globally, accounting for approximately 15% of all cancer cases in men. It is particularly prevalent in developed countries, with higher incidence rates observed in North America and Europe.</p>
+                <div class="image">
+                    <img src="images/lung cancer world.jpg" alt="Global lung Cancer Incidence">
+                    <p><i>Global map indicating the prevalence of lung cancer.</i></p>
+                </div>
+            </div>
+            <div class="section">
+                <h2>Incidence in Saudi Arabia</h2>
+                <p>In Saudi Arabia, the incidence of lung cancer has been rising steadily, currently accounting for about 12% of all cancer cases reported annually among men. Early detection efforts and awareness campaigns are crucial for improving outcomes in the region.</p>
+                <div class="image">
+                    <img src="images/lung cancer SA.jpg" alt="lung Cancer in Saudi Arabia">
+                    <p><i>Graph showcasing lung cancer statistics in Saudi Arabia.</i></p>
+                </div>
+            </div>
+        </div>
+        <details id="lung-cancer-types" class="section section-intro" data-aos="fade-right" data-aos-delay="300">
+  <summary>
+    <h2> Types of Lung Cancer <span class="arrow"></span></h2>
+  </summary>
+  <div class="decor-line"></div>
+  
+  <div class="section" data-aos="fade-up" data-aos-delay="300">
+    <h3><span class="icon">🫁</span> Adenocarcinoma</h3>
+    <p>The most common type of lung cancer, especially in non-smokers. It originates in the outer regions of the lungs and usually grows more slowly than other forms.</p>
+  </div>
+
+  <div class="section" data-aos="fade-up" data-aos-delay="400">
+    <h3><span class="icon">🧱</span> Squamous Cell Carcinoma</h3>
+    <p>Often associated with smoking, this cancer starts in the flat cells lining the airways and typically develops in the central parts of the lungs.</p>
+  </div>
+
+  <div class="section" data-aos="fade-up" data-aos-delay="500">
+    <h3><span class="icon">⚡</span> Small Cell Lung Cancer (SCLC)</h3>
+    <p>A fast-growing and aggressive cancer type, strongly linked to smoking. It frequently spreads to other parts of the body early in the disease.</p>
+  </div>
+
+  <div class="section" data-aos="fade-up" data-aos-delay="600">
+    <h3><span class="icon">🧬</span> Large Cell Carcinoma</h3>
+    <p>A rarer form that can appear in any part of the lung. It tends to grow and spread quickly, often making it more difficult to treat.</p>
+  </div>
+</details>
+<details id="early-warning" class="section section-intro" data-aos="fade-left" data-aos-delay="300">
+    <summary><h2><span class="icon">⚠️</span> Early Warning Signs and Symptoms Of Lung Cancer</h2></summary>
+    <div class="decor-line"></div>
+    <h3>Early Warning Signs</h3>
+    <p>These are subtle signs that may appear in the early stages of lung cancer and warrant medical attention:</p>
+    <ul style="padding-left: 20px; line-height: 1.8;">
+        <li>Persistent cough that doesn't go away.</li>
+        <li>Mild shortness of breath during routine activities.</li>
+        <li>Unexplained fatigue or weakness.</li>
+        <li>Mild chest discomfort or pain.</li>
+    </ul>
+    <h3>Symptoms in Advanced Stages</h3>
+    <p>As lung cancer progresses, symptoms become more noticeable and may include:</p>
+    <ul style="padding-left: 20px; line-height: 1.8;">
+        <li>Coughing up blood or rust-colored sputum.</li>
+        <li>Severe chest pain.</li>
+        <li>Significant weight loss without trying.</li>
+        <li>Hoarseness or voice changes.</li>
+        <li>Recurrent infections like bronchitis or pneumonia.</li>
+    </ul>
+    <p>Early detection is critical. If you experience any of these signs, consult a healthcare professional promptly.</p>
+    </details>
+</section>
+ <details id="causes" class="section section-intro " data-aos="fade-right" data-aos-delay="200">
+            <summary><h2><span class="icon">🔍</span> What Can Cause Lung Cancer?</h2></summary>
+            <div class="decor-line"></div>
+            <p>The exact causes of lung cancer are not fully understood, but several risk factors can increase your chances of developing it:</p>
+            <ul style="padding-left: 20px; line-height: 1.8;">
+                <li><span class="icon">🚬</span> <strong>Smoking</strong>: The leading cause of lung cancer. The risk increases with the number of cigarettes and the length of time a person smokes.</li>
+                <li><span class="icon">🌫️</span> <strong>Secondhand Smoke</strong>: Prolonged exposure to secondhand smoke can increase the risk of lung cancer, even for non-smokers.</li>
+                <li><span class="icon">☢️</span> <strong>Harmful Substances</strong>: Exposure to substances like asbestos, radon gas, or other carcinogens at work or home can elevate lung cancer risk.</li>
+            </ul>
+            <p>Reducing exposure to these risk factors and regular check-ups can significantly lower your risk. Consult a healthcare professional for personalized advice.</p>
+        </details>
+<section id="risk" class="section section-intro" data-aos="fade-left">
+  <h2>How to Reduce Risk</h2>
+  <p>Avoid smoking, reduce exposure to harmful chemicals, and consider regular health screenings if you have a family history or environmental risk factors.</p>
+</section>
+    </main>
+     <footer>
+        © 2025 Lung Cancer Awareness | <a href="privacy-policy.html">Privacy Policy</a>
+    </footer>
+    <button class="back-to-top" aria-label="Back to top">↑</button>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800 });
+        const backToTop = document.querySelector('.back-to-top');
+        window.addEventListener('scroll', () => {
+            backToTop.style.display = window.scrollY > 300 ? 'block' : 'none';
+        });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
