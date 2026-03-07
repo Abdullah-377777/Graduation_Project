@@ -418,17 +418,20 @@ input[type="number"]:focus {
         © 2025 Lung Cancer Awareness | <a href="privacy-policy.html">Privacy Policy</a>
     </footer>
     <button class="back-to-top" aria-label="Back to top">↑</button>
-  <script>
-    document.getElementById('prediction-form').onsubmit = async function(event) {
-    event.preventDefault();
+
+  
+ <script>
+async function predictLungCancer() {
     const loading = document.getElementById('loading');
-    const errorMessage = document.getElementById('error-message');
-    const predictionResult = document.getElementById('prediction-result');
+    const errorMsg = document.getElementById('error-message');
+    const resultDiv = document.getElementById('prediction-result');
 
+    // إخفاء النتائج السابقة وإظهار التحميل
+    errorMsg.innerHTML = '';
+    resultDiv.innerHTML = '';
     loading.style.display = 'block';
-    errorMessage.innerHTML = ''; // Clear previous error messages
-    predictionResult.innerHTML = ''; // Clear previous prediction
 
+    // جمع القيم
     const geneValues = [
         parseFloat(document.getElementById('gene1').value),
         parseFloat(document.getElementById('gene2').value),
@@ -436,30 +439,17 @@ input[type="number"]:focus {
         parseFloat(document.getElementById('gene4').value)
     ];
 
-    const geneIds = ['gene1', 'gene2', 'gene3', 'gene4'];
-
-    // التحقق من القيم غير الصحيحة
+    // التحقق من القيم
     for (let i = 0; i < geneValues.length; i++) {
-        if (isNaN(geneValues[i])) {
+        if (isNaN(geneValues[i]) || geneValues[i] === '') {
             loading.style.display = 'none';
-            errorMessage.innerHTML = 'Please enter valid numeric values.';
+            errorMsg.innerHTML = 'يرجى إدخال أرقام صحيحة في جميع الحقول.';
             return;
         }
         if (geneValues[i] === 0) {
             loading.style.display = 'none';
-            errorMessage.innerHTML = `Prediction cannot be made because the input value for ${geneIds[i]} is zero.`;
+            errorMsg.innerHTML = 'لا يمكن التنبؤ إذا كانت إحدى القيم صفرًا.';
             return;
-        }
-    }
-
-    // التحقق من تسلسل الإدخال
-    for (let i = 0; i < geneIds.length; i++) {
-        if (document.getElementById(geneIds[i]).value === '') {
-            if (i > 0 && document.getElementById(geneIds[i - 1]).value !== '') {
-                loading.style.display = 'none';
-                errorMessage.innerHTML = `Please fill the input for ${geneIds[i]} before moving to the next.`;
-                return;
-            }
         }
     }
 
@@ -468,43 +458,35 @@ input[type="number"]:focus {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-API-KEY': 'rf_api_key' // استبدل بمفتاح API صالح
+                'X-API-KEY': 'rf_api_key'   // ← القيمة التي قدمتها
             },
             body: JSON.stringify({ data: geneValues })
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            throw new Error(`خطأ في السيرفر: ${response.status} - ${response.statusText}`);
         }
 
         const data = await response.json();
+
         if (!data.prediction) {
-            throw new Error('Invalid response format: prediction field is missing');
+            throw new Error('لم يتم إرجاع نتيجة تنبؤ صالحة');
         }
 
-        const predictionText = `Prediction: ${data.prediction}`;
-        const emoji = data.prediction === 'normal' ? '😊' : '😢';
+        const emoji = data.prediction.toLowerCase().includes('normal') ? '😊' : '😢';
+        resultDiv.innerHTML = `${emoji} التنبؤ: ${data.prediction}`;
 
-        predictionResult.innerHTML = `${emoji} ${predictionText}`;
-
-        const emojiElement = document.createElement('span');
-        emojiElement.className = 'emoji show';
-        emojiElement.innerHTML = emoji;
-        predictionResult.appendChild(emojiElement);
-
-        setTimeout(() => {
-            emojiElement.classList.remove('show');
-        }, 2000);
     } catch (error) {
-        console.error('Error during prediction:', error); // تسجيل الخطأ في وحدة التحكم
-        errorMessage.innerHTML = `Error: ${error.message}`;
+        console.error('خطأ في التنبؤ:', error);
+        errorMsg.innerHTML = `حدث خطأ: ${error.message}`;
     } finally {
         loading.style.display = 'none';
     }
-};
-
+}
+</script>
 
 </script>
 </body>
 </html>
+
 
